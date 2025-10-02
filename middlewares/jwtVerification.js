@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
 
 import { JWT_PRIVATE_KEY, JWT_VALIDATION_KEY, JWT_ALGO, JWT_EXPIRY_TOKEN_TIME, JWT_EXPIRY_REFRESH_TIME, BE_URL } from '../config'
-import { FIFTEENMINUTES, FIVEMINUTES } from '../Constants'
-import { TokenService } from '../Services'
-import { getUtcTime, addHours, addMonths, getMinutesDiff, Logger, sendResponse } from '../Utils'
+import { FIFTEENMINUTES, FIVEMINUTES } from '../constants'
+import { TokenService } from '../services'
+import { getUtcTime, addHours, addMonths, getMinutesDiff, Logger, sendResponse } from '../utils'
 
 export const verifyToken = async (req, res, next) => {
 	try {

@@ -45,9 +45,9 @@ We are delighted to have you here. Here's what you can do:
 
 Stay connected:
 
-- Website: https://breeth.io
-- Support: support@breeth.io
-- Twitter: @BreethOfficial
+- Website: https://thebreeth.com
+- Support: support@thebreeth.com
+- Twitter: @TheBreethOfficial
 
 
 Let's create something amazing together!
