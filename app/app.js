@@ -25,6 +25,13 @@ export const InitializeApp = async () => {
 	// set security HTTP headers
 	app.use(helmet())
 
+	// Configure CORS for Socket.IO
+	app.use(cors({
+		origin: ['http://localhost:8080', FE_URL],
+		methods: ['GET', 'POST'],
+		credentials: true
+	}));
+
 	app.use(bodyParser.json({ limit: '50mb' }));
 	app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
@@ -67,6 +74,12 @@ export const InitializeApp = async () => {
 	// Serve socket client HTML for convenience
 	app.get('/socket-client', (req, res) => {
 		const file = path.join(__dirname, '..', 'scripts', 'socketClient.html')
+		return res.sendFile(file)
+	})
+
+	// Serve socket test page
+	app.get('/socket-test', (req, res) => {
+		const file = path.join(__dirname, '..', 'scripts', 'socket-test.html')
 		return res.sendFile(file)
 	})
 
