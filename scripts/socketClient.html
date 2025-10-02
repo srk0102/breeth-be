@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Socket Client Example — Breeth</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px }
+    input, button { padding: 8px; margin: 4px }
+    #log { white-space: pre-wrap; background: #f7f7f7; padding: 10px; border: 1px solid #ddd; height: 300px; overflow:auto }
+  </style>
+</head>
+<body>
+  <h3>Socket.io Client Example</h3>
+  <p>Enter a jobId produced by the API and click <strong>Subscribe</strong>. The client will display <code>update</code> events and automatically close when the job reaches a terminal state.</p>
+
+  <label>Server URL: <input id="serverUrl" type="text" value="http://localhost:8000" size="40" /></label>
+  <br />
+  <label>Job ID: <input id="jobId" type="text" placeholder="paste job id here" size="36" /></label>
+  <button id="btnSubscribe">Subscribe</button>
+  <button id="btnDisconnect">Disconnect</button>
+
+  <h4>Log</h4>
+  <div id="log"></div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const logEl = document.getElementById('log')
+    const serverUrlEl = document.getElementById('serverUrl')
+    const jobIdEl = document.getElementById('jobId')
+    const btnSubscribe = document.getElementById('btnSubscribe')
+    const btnDisconnect = document.getElementById('btnDisconnect')
+    let socket = null
+
+    function appendLog(...parts) {
+      const now = new Date().toISOString()
+      logEl.textContent = `${now} - ${parts.join(' ')}\n` + logEl.textContent
+    }
+
+    btnSubscribe.addEventListener('click', () => {
+      const url = serverUrlEl.value.trim() || window.location.origin
+      const jobId = jobIdEl.value.trim()
+      if (!jobId) return appendLog('Please provide a jobId')
+
+      if (socket && socket.connected) {
+        appendLog('Already connected — subscribing to', jobId)
+        socket.emit('subscribe', { jobId })
+        return
+      }
+
+      appendLog('Connecting to', url)
+      socket = io(url, { transports: ['websocket'], reconnection: true })
+
+      socket.on('connect', () => {
+        appendLog('Socket connected', socket.id)
+        socket.emit('subscribe', { jobId })
+      })
+
+      socket.on('update', (data) => {
+        appendLog('UPDATE', JSON.stringify(data))
+      })
+
+      socket.on('completed', (data) => {
+        appendLog('COMPLETED', JSON.stringify(data))
+        // auto close after a short delay so UI can show final payload
+        setTimeout(() => {
+          try { socket.disconnect(); appendLog('Socket disconnected (auto)') } catch (e) { appendLog('Disconnect error', e.message) }
+        }, 800)
+      })
+
+      socket.on('cancelled', (info) => appendLog('CANCELLED', JSON.stringify(info)))
+      socket.on('error', (err) => appendLog('ERROR', JSON.stringify(err)))
+      socket.on('disconnect', (reason) => appendLog('Socket disconnected:', reason))
+    })
+
+    btnDisconnect.addEventListener('click', () => {
+      if (socket) {
+        socket.disconnect()
+        appendLog('Socket manually disconnected')
+      }
+    })
+  </script>
+</body>
+</html>

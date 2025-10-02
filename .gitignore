@@ -1,0 +1,66 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+tmp/
+temp/
+.cache/
+
+# Build output
+dist/
+build/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# MacOS
+.DS_Store
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Uploaded artifacts / test uploads (project-specific)
+uploads/
+uploads/**
+utils/uploads/
+utils/uploads/**
+utils/uploads/artifacts/
+uploads/artifacts/
+uploads/test/
+
+# Database files
+*.sqlite
+*.sqlite3
+
+# Private keys, certs
+*.pem
+*.key
+
+# Misc
+*.tgz
+
+# PM2
+pm2.pid
+pm2.*
